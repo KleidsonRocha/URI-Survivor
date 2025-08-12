@@ -6,16 +6,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        // Encontra o player automaticamente
-        PlayerController player = FindObjectOfType<PlayerController>();
-        if (player != null)
-        {
-            target = player.transform;
-        }
-        else
-        {
-            Debug.LogError("Player não encontrado!");
-        }
+        target = FindObjectOfType<PlayerController>().transform;
     }
 
     void LateUpdate()
