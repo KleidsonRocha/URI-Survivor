@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 
     public float moveSpeed;
 
-
+    public Animator anim;
     // Start é chamado antes do primeiro frame
     void Start()
     {
@@ -23,5 +23,13 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(moveInput);
 
         transform.position += moveInput * moveSpeed * Time.deltaTime;
+
+        if(moveInput != Vector3.zero)
+        {
+            anim.SetBool("isMoving", true);
+        } else
+        {
+            anim.SetBool("isMoving", false);
+        }
     }
 }
