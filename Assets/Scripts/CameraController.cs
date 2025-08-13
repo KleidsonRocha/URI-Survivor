@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
         target = FindObjectOfType<PlayerController>().transform;
     }
 
+
     void LateUpdate()
     {
         if (target != null)
