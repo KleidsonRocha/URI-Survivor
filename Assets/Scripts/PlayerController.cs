@@ -1,33 +1,33 @@
-using Unity.Profiling;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     public float moveSpeed;
-
     public Animator anim;
-    // Start é chamado antes do primeiro frame
+    private Rigidbody2D rb;
+
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
 
+        // Configuracoes importantes para evitar empurrao permanente
+        rb.linearDamping = 5f; // Adiciona resistencia natural
+        rb.angularDamping = 5f;  // Adiciona resistencia natural
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
-    // Update é chamado uma vez por frame
-    void Update()
+    void FixedUpdate() // Use FixedUpdate com Rigidbody2D
     {
-        Vector3 moveInput = new Vector3(0f, 0f, 0f);
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
+        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        //Debug.Log(moveInput);
+        // Movimento usando Rigidbody2D
+        rb.linearVelocity = moveInput * moveSpeed;
 
-        transform.position += moveInput * moveSpeed * Time.deltaTime;
-
-        if(moveInput != Vector3.zero)
+        if (moveInput != Vector2.zero)
         {
             anim.SetBool("isMoving", true);
-        } else
+        }
+        else
         {
             anim.SetBool("isMoving", false);
         }
