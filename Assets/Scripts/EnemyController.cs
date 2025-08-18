@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        target = FindObjectOfType<PlayerController>().transform;
+        target = FindAnyObjectByType<PlayerController>().transform;
     }
 
     void FixedUpdate() // Use FixedUpdate para física

@@ -6,15 +6,13 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        target = FindObjectOfType<PlayerController>().transform;
+        target = FindFirstObjectByType<PlayerController>()?.transform;
     }
-
 
     void LateUpdate()
     {
         if (target != null)
         {
-            // Segue o player mantendo a posição Z da câmera
             transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
         }
     }
