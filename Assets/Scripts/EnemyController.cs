@@ -88,6 +88,8 @@ public class EnemyController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        DamageNumberController.instance.SpawnDamage(damakeToTake, transform.position);
     }
 
     public void TakeDamage(float damageToTake, bool shouldKnockBack)
