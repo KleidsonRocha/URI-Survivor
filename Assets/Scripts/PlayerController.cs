@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private InputActionReference moveActionToUse;
     private Vector2 moveInput;
+    private bool wasMoving = false; // Para detectar quando começou/parou de se mover
 
     void Start()
     {
@@ -36,10 +37,17 @@ public class PlayerController : MonoBehaviour
         // Movimento usando Rigidbody2D
         rb.linearVelocity = moveInput * moveSpeed;
 
+        // Detecta se está se movendo
+        bool isCurrentlyMoving = moveInput != Vector2.zero;
+
         // Controle da animação
-        if (moveInput != Vector2.zero)
+        if (isCurrentlyMoving)
         {
-            anim.SetBool("isMoving", true);
+            // Se não estava se movendo antes, começou a se mover agora
+            if (!wasMoving)
+            {
+                anim.SetBool("isMoving", true);
+            }
 
             // Espelhar sprite baseado na direção horizontal
             if (moveInput.x > 0) // Movendo para direita
@@ -53,8 +61,15 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            anim.SetBool("isMoving", false);
+            // Parou de se mover
+            if (wasMoving)
+            {
+                anim.SetBool("isMoving", false);
+            }
         }
+
+        // Atualiza o estado anterior
+        wasMoving = isCurrentlyMoving;
     }
 
     void OnEnable()
