@@ -117,6 +117,8 @@ MonoBehaviour:
   damage: 5
   hitWaitTime: 1
   health: 5
+  knockBackTime: 0.5
+  useDamageDetection: 0
 --- !u!114 &6679090484152525089
 MonoBehaviour:
   m_ObjectHideFlags: 0
