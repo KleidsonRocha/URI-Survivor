@@ -20,15 +20,25 @@ public class EnemyController : MonoBehaviour
     private float knockBackCounter;
 
     [Header("Damage Detection System")]
-    public bool useDamageDetection = true; // Toggle para ativar/desativar
+    public bool useDamageDetection = true;
 
-    // Flag do sistema de detecção - Similar ao wasMoving do player
+    // ADICIONE ESTA LINHA - Referência ao Animator
+    [Header("Animation")]
+    public Animator animator;
+
+    // Flag do sistema de detecção
     private bool hasTakenDamage = false;
     private bool isDead = false;
 
     void Start()
     {
         target = FindAnyObjectByType<PlayerController>().transform;
+
+        // ADICIONE ESTA VERIFICAÇÃO - Pega o Animator automaticamente se não foi atribuído
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
     }
 
     void FixedUpdate()
@@ -88,22 +98,36 @@ public class EnemyController : MonoBehaviour
     {
         health -= damageToTake;
 
-        // SISTEMA DE DETECÇÃO DE DANO - Similar ao isMoving do player
+        // SISTEMA DE DETECÇÃO DE DANO - MODIFICADO
         if (useDamageDetection && !hasTakenDamage)
         {
-            hasTakenDamage = true; // Ativa a flag (permanece ativa até morrer)
-            Debug.Log($"{gameObject.name} tomou dano pela primeira vez!");
+            hasTakenDamage = true;
+
+            if (animator != null)
+            {
+                animator.SetBool("hasTakenDamage", true);
+            }
+
+            //Debug.Log($"{gameObject.name} tomou dano pela primeira vez!");
         }
 
         if (health <= 0)
         {
             isDead = true;
+
+            // OPCIONAL - Atualizar animator para estado de morte
+            //if (animator != null)
+            //{
+            //    animator.SetBool("isDead", true);
+            //}
+
             Debug.Log($"{gameObject.name} morreu!");
             Destroy(gameObject);
         }
 
         DamageNumberController.instance.SpawnDamage(damageToTake, transform.position);
     }
+
 
     public void TakeDamage(float damageToTake, bool shouldKnockBack)
     {
@@ -133,6 +157,13 @@ public class EnemyController : MonoBehaviour
         {
             hasTakenDamage = false;
             isDead = false;
+
+            // Reseta também o animator
+            if (animator != null)
+            {
+                animator.SetBool("hasTakenDamage", false);
+                animator.SetBool("isDead", false);
+            }
         }
     }
 }
