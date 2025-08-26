@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2135809511945597283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7530888676719354763}
+  m_Layer: 3
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7530888676719354763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135809511945597283}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7677903237644051378}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4482693678661757349
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,7 +44,8 @@ GameObject:
   - component: {fileID: 551494629239438276}
   - component: {fileID: 3402181656369557748}
   - component: {fileID: 6679090484152525089}
-  m_Layer: 0
+  - component: {fileID: 9019246656060815734}
+  m_Layer: 3
   m_Name: Enemy - Esqueleto
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -34,6 +66,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6885238108426577453}
+  - {fileID: 7530888676719354763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &2913576539487012356
@@ -136,6 +169,27 @@ MonoBehaviour:
   speed: 0.5
   minSize: 0.9
   maxSize: 1.1
+--- !u!114 &9019246656060815734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4482693678661757349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8691a5e711a0d844b9ae25aa05b9f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 5376335842204386835, guid: 44da026c0b8c1cb4b8986e465d02ab91, type: 3}
+  firePoint: {fileID: 7530888676719354763}
+  attackRange: 8
+  attackCooldown: 2
+  projectileSpeed: 3
+  projectileDamage: 1
+  keepDistanceRange: 4
+  shouldMaintainDistance: 1
+  enableDebugLogs: 1
 --- !u!1 &7666800265219893712
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6885238108426577453}
   - component: {fileID: 4255461778066145960}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

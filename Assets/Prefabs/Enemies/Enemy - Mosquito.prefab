@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3402181656369557748}
   - component: {fileID: 6679090484152525089}
   - component: {fileID: 6648737160447946769}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Enemy - Mosquito
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6885238108426577453}
   - component: {fileID: 4255461778066145960}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

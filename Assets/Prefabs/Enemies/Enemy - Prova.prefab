@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2936708984683274411}
   - component: {fileID: 9105885249423189772}
   - component: {fileID: 864524227612588568}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 7315685280153016595}
   - component: {fileID: 6653293302804961365}
   - component: {fileID: 5562961874455945069}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1023373143057008742}
   - component: {fileID: 7687899750255537379}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +355,7 @@ GameObject:
   - component: {fileID: 9117675808107323071}
   - component: {fileID: 940797740981636970}
   - component: {fileID: 4885974724303321814}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Enemy - Prova
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -463,9 +463,6 @@ MonoBehaviour:
   knockBackTime: 0.5
   useDamageDetection: 1
   animator: {fileID: 4885974724303321814}
-  deathEffectType: 0
-  useGenericDeathEffect: 1
-  damageText: {fileID: 864524227612588568}
 --- !u!114 &940797740981636970
 MonoBehaviour:
   m_ObjectHideFlags: 0
