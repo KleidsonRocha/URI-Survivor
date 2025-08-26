@@ -93,7 +93,7 @@ public class EnemyProjectile : MonoBehaviour
             // Destruir o projétil
             DestroyProjectile();
         }
-        else if (collision.CompareTag("Wall") || collision.CompareTag("Obstacle"))
+        else if (collision.CompareTag("Wall"))
         {
             if (enableDebugLogs)
             {

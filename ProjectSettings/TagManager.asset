@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -47,6 +48,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 348001087
+    locked: 0
+  - name: Wall
+    uniqueID: 1293270951
     locked: 0
   - name: Player
     uniqueID: 2661535903

@@ -189,7 +189,7 @@ MonoBehaviour:
   projectileDamage: 1
   keepDistanceRange: 4
   shouldMaintainDistance: 1
-  enableDebugLogs: 1
+  enableDebugLogs: 0
 --- !u!1 &7666800265219893712
 GameObject:
   m_ObjectHideFlags: 0
