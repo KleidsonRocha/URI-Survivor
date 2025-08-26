@@ -34,7 +34,6 @@ public class EnemyController : MonoBehaviour
     {
         target = FindAnyObjectByType<PlayerController>().transform;
 
-        // ADICIONE ESTA VERIFICAÇÃO - Pega o Animator automaticamente se não foi atribuído
         if (animator == null)
         {
             animator = GetComponent<Animator>();
