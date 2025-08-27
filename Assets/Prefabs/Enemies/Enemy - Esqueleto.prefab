@@ -183,9 +183,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5376335842204386835, guid: 44da026c0b8c1cb4b8986e465d02ab91, type: 3}
   firePoint: {fileID: 7530888676719354763}
-  attackRange: 8
+  attackRange: 6
   attackCooldown: 2
-  projectileSpeed: 3
+  projectileSpeed: 2
   projectileDamage: 1
   keepDistanceRange: 4
   shouldMaintainDistance: 1

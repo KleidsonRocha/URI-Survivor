@@ -19,6 +19,13 @@ public class EnemySpawner : MonoBehaviour
     public int checkPerFrame;
     private int enemyToCheck;
 
+    public List<WaveInfo> waves;
+
+    private int currentWave;
+
+    private float waveCounter;
+
+
     public Vector3 SelectSpawnPoint()
     {
         Vector3 spawnPoint = Vector3.zero;
@@ -53,15 +60,19 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        spawnCounter = timeTopSpawn;
+        //spawnCounter = timeTopSpawn;
 
         target = FindAnyObjectByType<PlayerController>().transform;
 
         despawnDistance = Vector3.Distance(transform.position, maxSpawn.position) + 4f;
+
+        currentWave = -1;
+        GoToNextWave();
     }
 
     void Update()
     {
+        /*
         spawnCounter -= Time.deltaTime;
         if (spawnCounter <= 0f)
         {
@@ -72,6 +83,31 @@ public class EnemySpawner : MonoBehaviour
 
            spawnedEnemies.Add(newEnemy);
 
+        }
+        */
+
+        if(PlayerHealthController.instance.gameObject.activeSelf)
+        {
+            if(currentWave < waves.Count)
+            {
+                waveCounter -= Time.deltaTime;
+
+                if(waveCounter <= 0)
+                {
+                    GoToNextWave();
+                }
+
+                spawnCounter -= Time.deltaTime;
+
+                if(spawnCounter <=  0)
+                {
+                    spawnCounter = waves[currentWave].timeBetweenSpawns;
+
+                    GameObject newEnemy = Instantiate(waves[currentWave].enemyToSpawn, SelectSpawnPoint(), Quaternion.identity);
+
+                    spawnedEnemies.Add(newEnemy);
+                }
+            }
         }
 
         transform.position = target.position;
@@ -107,5 +143,25 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    public void GoToNextWave()
+    {
+        currentWave++;
 
+        if(currentWave >= waves.Count)
+        {
+            currentWave = waves.Count - 1;
+        }
+
+        waveCounter = waves[currentWave].waveLength;
+        spawnCounter = waves[currentWave].timeBetweenSpawns;
+    }
+}
+
+[System.Serializable]
+
+public class WaveInfo
+{
+    public GameObject enemyToSpawn;
+    public float waveLength = 10f;
+    public float timeBetweenSpawns = 1f;
 }

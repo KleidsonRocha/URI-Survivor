@@ -455,11 +455,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theRB: {fileID: 6204212709847930255}
-  moveSpeed: 1
+  moveSpeed: 1.5
   stopDistance: 0.5
-  damage: 5
+  damage: 15
   hitWaitTime: 1
-  health: 5
+  health: 25
   knockBackTime: 0.5
   useDamageDetection: 1
   animator: {fileID: 4885974724303321814}
