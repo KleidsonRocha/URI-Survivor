@@ -6,6 +6,7 @@ public class EnemyController : MonoBehaviour
     public Rigidbody2D theRB;
     public float moveSpeed;
     public float stopDistance = 0.5f;
+    public int expToGive = 1;
     private Transform target;
 
     [Header("Combat Settings")]
@@ -97,7 +98,7 @@ public class EnemyController : MonoBehaviour
     {
         health -= damageToTake;
 
-        // SISTEMA DE DETECÇÃO DE DANO - MODIFICADO
+        // SISTEMA DE DETECÇÃO DE DANO
         if (useDamageDetection && !hasTakenDamage)
         {
             hasTakenDamage = true;
@@ -114,14 +115,11 @@ public class EnemyController : MonoBehaviour
         {
             isDead = true;
 
-            // OPCIONAL - Atualizar animator para estado de morte
-            //if (animator != null)
-            //{
-            //    animator.SetBool("isDead", true);
-            //}
 
             Debug.Log($"{gameObject.name} morreu!");
             Destroy(gameObject);
+
+            ExperienceLevelController.instance.SpawnExp(transform.position, expToGive);
         }
 
         DamageNumberController.instance.SpawnDamage(damageToTake, transform.position);

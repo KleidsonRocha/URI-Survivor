@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
     public Animator anim;
+    public float pickupRange = 1.5f;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
 

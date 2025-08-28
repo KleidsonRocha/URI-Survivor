@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI; // Para elementos de UI (Button, Text)
-using TMPro; // Se você estiver usando TextMeshPro, caso contrário, remova e use UnityEngine.UI.Text
+using TMPro; 
 
 public class LevelSelectManager : MonoBehaviour
 {
@@ -105,7 +105,6 @@ public class LevelSelectManager : MonoBehaviour
         }
     }
 
-    // Método para um botão de "Resetar Progresso" (opcional, para testes)
     public void OnClickResetProgress()
     {
         if (LevelManager.instance != null)
