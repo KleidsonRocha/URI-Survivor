@@ -1,8 +1,19 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public List<Weapon> unassignedWeapons, assignedWeapons;
+
     public float moveSpeed;
     public Animator anim;
     public float pickupRange = 1.5f;
@@ -16,6 +27,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        AddWeapon(Random.Range(0, unassignedWeapons.Count));   
+
+
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -72,6 +86,18 @@ public class PlayerController : MonoBehaviour
 
         // Atualiza o estado anterior
         wasMoving = isCurrentlyMoving;
+    }
+
+    public void AddWeapon(int weaponNumber)
+    {
+        if (weaponNumber < unassignedWeapons.Count)
+        {
+            assignedWeapons.Add(unassignedWeapons[weaponNumber]);
+
+            unassignedWeapons[weaponNumber].gameObject.SetActive(true);
+            unassignedWeapons.RemoveAt(weaponNumber);
+        }
+
     }
 
     void OnEnable()

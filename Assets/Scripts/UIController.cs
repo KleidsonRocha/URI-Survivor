@@ -14,6 +14,10 @@ public class UIController : MonoBehaviour
 
     public TMP_Text expLvlText;
 
+    public LevelUpSelectionButton[] levelUpButtons;
+
+    public GameObject levelUpPanel;
+
     private void Awake()
     {
        

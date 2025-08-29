@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; // Importar para carregar cenas (mas LevelManager fará isso)
+using UnityEngine.SceneManagement;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -24,14 +24,13 @@ public class EnemySpawner : MonoBehaviour
     private int currentWave;
     private float waveCounter;
 
-    private bool allWavesInitiated = false; // Nova flag para indicar se todas as ondas foram iniciadas
-
+    private bool allWavesInitiated = false; // Flag para indicar se todas as ondas foram iniciadas
 
     public Vector3 SelectSpawnPoint()
     {
         Vector3 spawnPoint = Vector3.zero;
 
-        // Lógica de seleção de ponto de spawn (conforme seu código)
+        // Lógica de seleção de ponto de spawn
         if (Random.Range(0f, 1f) > .5f)
         {
             spawnPoint.y = Random.Range(minSpawn.position.y, maxSpawn.position.y);
@@ -63,7 +62,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        // Encontra o player para seguir (assumindo que PlayerController está no player)
+        // Encontra o player para seguir
         PlayerController player = FindAnyObjectByType<PlayerController>();
         if (player != null)
         {
@@ -72,7 +71,6 @@ public class EnemySpawner : MonoBehaviour
         else
         {
             Debug.LogError("PlayerController não encontrado! O Spawner não poderá seguir o player.");
-            // Se PlayerController for essencial, você pode desabilitar o spawner ou exibir uma mensagem de erro fatal aqui.
         }
 
         // Calcula a distância de despawn
@@ -80,13 +78,19 @@ public class EnemySpawner : MonoBehaviour
 
         currentWave = -1; // Começa antes da primeira onda
         allWavesInitiated = false; // Reseta a flag
+
+        // Inicializa os timers de todas as waves
+        for (int i = 0; i < waves.Count; i++)
+        {
+            waves[i].spawnTimer = waves[i].timeBetweenSpawns;
+        }
+
         GoToNextWave(); // Inicia a primeira onda
     }
 
     void Update()
     {
-        // Certifica-se de que o player está ativo antes de continuar a lógica do spawner
-        // (Assumindo que PlayerHealthController.instance existe e controla a vida do player)
+        // Certifica-se de que o player está ativo antes de continuar
         if (PlayerHealthController.instance != null && PlayerHealthController.instance.gameObject.activeSelf)
         {
             // Lógica de spawn das ondas
@@ -99,24 +103,28 @@ public class EnemySpawner : MonoBehaviour
                     GoToNextWave(); // Tenta ir para a próxima onda
                 }
 
-                // Se ainda estamos em uma onda válida para spawn (não todas as ondas completadas ainda)
-                if (currentWave < waves.Count)
+
+                if (currentWave >= 0 && currentWave < waves.Count)
                 {
-                    spawnCounter -= Time.deltaTime;
-
-                    if (spawnCounter <= 0)
+                    // Para cada wave de 0 até a atual
+                    for (int i = 0; i <= currentWave; i++)
                     {
-                        spawnCounter = waves[currentWave].timeBetweenSpawns;
+                        // Cada wave tem seu próprio timer
+                        waves[i].spawnTimer -= Time.deltaTime;
 
-                        GameObject newEnemy = Instantiate(waves[currentWave].enemyToSpawn, SelectSpawnPoint(), Quaternion.identity);
-                        spawnedEnemies.Add(newEnemy); // Adiciona o inimigo à lista de inimigos ativos
+                        if (waves[i].spawnTimer <= 0)
+                        {
+                            waves[i].spawnTimer = waves[i].timeBetweenSpawns;
+
+                            GameObject newEnemy = Instantiate(waves[i].enemyToSpawn, SelectSpawnPoint(), Quaternion.identity);
+                            spawnedEnemies.Add(newEnemy);
+                        }
                     }
                 }
             }
             else // Todas as ondas já iniciaram seus spawns
             {
                 // Verifica a condição de fim de fase: não há mais inimigos spawnados em cena
-                // A lista `spawnedEnemies` já se auto-limpa de inimigos destruídos/despawnados
                 if (spawnedEnemies.Count == 0)
                 {
                     Debug.Log("Todos os inimigos derrotados. Fase Completa!");
@@ -129,7 +137,7 @@ public class EnemySpawner : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogError("LevelManager não encontrado! Não foi possível completar a fase. Certifique-se de que o LevelManager está na cena de carregamento inicial.");
+                        Debug.LogError("LevelManager não encontrado! Não foi possível completar a fase.");
                     }
                 }
             }
@@ -141,7 +149,7 @@ public class EnemySpawner : MonoBehaviour
             transform.position = target.position;
         }
 
-        // Lógica de Despawn (conforme seu código)
+        // Lógica de Despawn
         int checkTarget = enemyToCheck + checkPerFrame;
 
         while (enemyToCheck < checkTarget)
@@ -183,7 +191,10 @@ public class EnemySpawner : MonoBehaviour
         if (currentWave < waves.Count)
         {
             waveCounter = waves[currentWave].waveLength;
-            spawnCounter = waves[currentWave].timeBetweenSpawns;
+
+           
+            waves[currentWave].spawnTimer = waves[currentWave].timeBetweenSpawns;
+
             Debug.Log($"Iniciando Onda {currentWave + 1} de {waves.Count}");
         }
         else
@@ -195,11 +206,13 @@ public class EnemySpawner : MonoBehaviour
     }
 }
 
-// WaveInfo permanece o mesmo
 [System.Serializable]
 public class WaveInfo
 {
     public GameObject enemyToSpawn;
     public float waveLength = 10f; // Duração total para spawnar inimigos nesta onda
     public float timeBetweenSpawns = 1f;
+
+    [HideInInspector]
+    public float spawnTimer; // Timer individual para cada wave
 }

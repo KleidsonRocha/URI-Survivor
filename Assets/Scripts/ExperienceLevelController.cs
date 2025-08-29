@@ -44,6 +44,7 @@ public class ExperienceLevelController : MonoBehaviour
         {
             UIController.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel);
         }
+        Debug.Log("Nível inicial do jogador: " + currentLevel);
     }
 
     void Update()
@@ -66,10 +67,8 @@ public class ExperienceLevelController : MonoBehaviour
             LevelUp();
         }
 
-        else if (UIController.instance != null)
-        {
-            UIController.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel);
-        }
+        UIController.instance.UpdateExperience(currentExperience, expLevels[currentLevel], currentLevel);
+        
     }
 
     public void SpawnExp(Vector3 position, int xpValue)
@@ -97,6 +96,15 @@ public class ExperienceLevelController : MonoBehaviour
             currentExperience = 0; 
         }
 
+        //PlayerController.Instance.activeWeapon.LevelUp();
+
+        UIController.instance.levelUpPanel.SetActive(true);
+
+        Time.timeScale = 0f;
+
+        //UIController.instance.levelUpButtons[1].UpdateButtonDisplay(PlayerController.Instance.activeWeapon);
+        UIController.instance.levelUpButtons[0].UpdateButtonDisplay(PlayerController.Instance.assignedWeapons[0]);
+
 
         if (UIController.instance != null)
         {
@@ -107,6 +115,6 @@ public class ExperienceLevelController : MonoBehaviour
 
         // Você pode adicionar mais lógica aqui, como conceder pontos de habilidade, restaurar vida, etc.
 
-        Debug.Log($"Parabéns! Você subiu para o nível {currentLevel}!");
+
     }
 }
