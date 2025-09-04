@@ -66,6 +66,12 @@ public class UIController : MonoBehaviour
         }
     }
 
+    public void SkipLevelUp()
+    {
+        levelUpPanel.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
     public void AnimateExpBarGain()
     {
         if (expFillImage != null)
@@ -85,7 +91,6 @@ public class UIController : MonoBehaviour
         }
     }
 
-    // Coroutine genérica para fazer a barra piscar para uma cor e depois voltar à sua cor dinâmica
     private IEnumerator FlashBarColorCoroutine(Color flashColor, float flashDuration, float fadeBackDuration)
     {
         expFillImage.color = flashColor;

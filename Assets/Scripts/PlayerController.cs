@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
 
     public List<Weapon> unassignedWeapons, assignedWeapons;
 
+    public int maxWeapons = 3;
+
+    [HideInInspector]
+    public List<Weapon> fullyLevelWeapons = new List<Weapon>();
+
     public float moveSpeed;
     public Animator anim;
     public float pickupRange = 1.5f;
@@ -98,6 +103,15 @@ public class PlayerController : MonoBehaviour
             unassignedWeapons.RemoveAt(weaponNumber);
         }
 
+    }
+
+    public void AddWeapon(Weapon weaponToAdd)
+    {
+        weaponToAdd.gameObject.SetActive(true);
+
+        assignedWeapons.Add(weaponToAdd);
+
+        unassignedWeapons.Remove(weaponToAdd);
     }
 
     void OnEnable()
