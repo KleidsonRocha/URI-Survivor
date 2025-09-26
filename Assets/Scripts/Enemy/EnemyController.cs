@@ -116,7 +116,6 @@ public class EnemyController : MonoBehaviour
             isDead = true;
 
 
-            Debug.Log($"{gameObject.name} morreu!");
             Destroy(gameObject);
 
             ExperienceLevelController.instance.SpawnExp(transform.position, expToGive);

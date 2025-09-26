@@ -147,6 +147,7 @@ MonoBehaviour:
   theRB: {fileID: 551494629239438276}
   moveSpeed: 1
   stopDistance: 0.5
+  expToGive: 1
   damage: 5
   hitWaitTime: 1
   health: 5

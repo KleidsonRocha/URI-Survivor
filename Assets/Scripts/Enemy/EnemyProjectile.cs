@@ -14,8 +14,6 @@ public class EnemyProjectile : MonoBehaviour
     private Vector3 direction;
     private bool hasHitTarget = false;
 
-    [Header("Debug")]
-    public bool enableDebugLogs = false;
 
     private Rigidbody2D rb;
 
@@ -23,10 +21,7 @@ public class EnemyProjectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        if (rb == null)
-        {
-            if (enableDebugLogs) Debug.LogError($"{gameObject.name}: Rigidbody2D não encontrado!");
-        }
+
 
         // Sistema de crescimento visual
         targetSize = transform.localScale;
@@ -35,10 +30,7 @@ public class EnemyProjectile : MonoBehaviour
         // Destruir após o tempo limite
         Destroy(gameObject, lifeTime);
 
-        if (enableDebugLogs)
-        {
-            Debug.Log($"{gameObject.name}: Projétil criado! Speed: {speed}, Damage: {damage}, LifeTime: {lifeTime}");
-        }
+
     }
 
     void Update()
@@ -51,11 +43,7 @@ public class EnemyProjectile : MonoBehaviour
         {
             rb.linearVelocity = direction * speed;
 
-            // Debug do movimento (apenas ocasionalmente)
-            if (enableDebugLogs && Time.frameCount % 60 == 0)
-            {
-                Debug.Log($"{gameObject.name}: Movendo na direção {direction} com velocidade {speed}. Posição atual: {transform.position}");
-            }
+
         }
     }
 
@@ -65,27 +53,17 @@ public class EnemyProjectile : MonoBehaviour
         damage = projectileDamage;
         speed = projectileSpeed;
 
-        if (enableDebugLogs)
-        {
-            Debug.Log($"{gameObject.name}: Inicializado! Direção: {direction}, Dano: {damage}, Velocidade: {speed}");
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (enableDebugLogs)
-        {
-            Debug.Log($"{gameObject.name}: Colidiu com {collision.name} (Tag: {collision.tag})");
-        }
+
 
         if (collision.CompareTag("Player") && !hasHitTarget)
         {
             hasHitTarget = true;
 
-            if (enableDebugLogs)
-            {
-                Debug.Log($"{gameObject.name}: ACERTOU O PLAYER! Causando {damage} de dano.");
-            }
+
 
             // Causar dano ao jogador
             PlayerHealthController.instance.TakeDamage(damage);
@@ -95,10 +73,7 @@ public class EnemyProjectile : MonoBehaviour
         }
         else if (collision.CompareTag("Wall"))
         {
-            if (enableDebugLogs)
-            {
-                Debug.Log($"{gameObject.name}: Colidiu com parede/obstáculo: {collision.name}");
-            }
+
 
             DestroyProjectile();
         }
@@ -111,10 +86,6 @@ public class EnemyProjectile : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
 
-        if (enableDebugLogs)
-        {
-            Debug.Log($"{gameObject.name}: Projétil destruído!");
-        }
 
         Destroy(gameObject);
     }

@@ -32,8 +32,10 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        if(assignedWeapons.Count == 0)
+        {
         AddWeapon(Random.Range(0, unassignedWeapons.Count));   
-
+        }
 
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
