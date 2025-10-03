@@ -12,7 +12,6 @@ public class ProjectileWeapon : Weapon
     public float weaponRange;
     public LayerMask whatIsEnemy;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -64,4 +63,5 @@ public class ProjectileWeapon : Weapon
 
         projectile.moveSpeed = stats[weaponLevel].speed;
     }
+
 }

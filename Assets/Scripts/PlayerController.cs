@@ -30,6 +30,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool wasMoving = false; // Para detectar quando começou/parou de se mover
 
+    public Vector2 GetMoveInput()
+    {
+        return moveInput;
+    }
+
+
     void Start()
     {
         if(assignedWeapons.Count == 0)
