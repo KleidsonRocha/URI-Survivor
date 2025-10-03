@@ -1,13 +1,11 @@
 using System;
 using UnityEngine;
-// Adicione esta linha se PlayerController estiver em um namespace diferente, o que geralmente não é o caso para scripts simples.
-// using YourGameNamespace; 
 
 public class CloseAtackWeapon : Weapon
 {
     public EnemyDamager damager;
 
-    private float attackCounter, direction;
+    private float attackCounter;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,7 +51,14 @@ public class CloseAtackWeapon : Weapon
                 }
 
 
-                Instantiate(damager, damager.transform.position, damager.transform.rotation, transform).gameObject.SetActive(true);
+            }
+            Instantiate(damager, damager.transform.position, damager.transform.rotation, transform).gameObject.SetActive(true);
+
+            for (int i = 1; i < stats[weaponLevel].amount; i++)
+            {
+                float rot = (360f / stats[weaponLevel].amount) * i;
+
+                Instantiate(damager, damager.transform.position, Quaternion.Euler(0f, 0f,damager.transform.rotation.eulerAngles.z + rot), transform).gameObject.SetActive(true);
             }
         }
     }
