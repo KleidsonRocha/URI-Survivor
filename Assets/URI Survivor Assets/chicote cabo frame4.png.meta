@@ -125,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: chicote cabo frame4_3
+      name: chicote cabo frame4_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 64
-        height: 64
+        height: 62
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4096edd057b3e8df0800000000000000
-      internalID: -176137961490978556
+      spriteID: 35f7a277c361ae7b0800000000000000
+      internalID: -5194314771265323181
       vertices: []
       indices: 
       edges: []
@@ -150,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0d42d1169d38db4408c92f7e232d0a10
+    spriteID: 20c6dfd8746a5b24a821823a8ed049fd
     internalID: 0
     vertices: []
     indices: 

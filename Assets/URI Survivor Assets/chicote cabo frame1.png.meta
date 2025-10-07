@@ -116,8 +116,8 @@ TextureImporter:
       name: chicote cabo frame1_0
       rect:
         serializedVersion: 2
-        x: 29
-        y: 29
+        x: 0
+        y: 0
         width: 35
         height: 35
       alignment: 0
