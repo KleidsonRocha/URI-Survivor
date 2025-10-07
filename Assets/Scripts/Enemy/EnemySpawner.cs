@@ -2,35 +2,78 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Define os tipos de movimento dos inimigos para serem usados nas ondas
+public enum EnemyMovementType
+{
+    Normal,
+    Dashing,
+    // Adicione mais tipos de movimento aqui, se necessário
+}
+
+public enum WaveContentType
+{
+    RegularEnemies, // A onda spawna inimigos regulares definidos por enemyToSpawn
+    BossEncounter   // A onda spawna um único bossPrefab
+}
+
+[System.Serializable]
+public class WaveInfo
+{
+    [Header("Tipo de Conteúdo da Onda")]
+    public WaveContentType contentType = WaveContentType.RegularEnemies;
+
+    [Header("Configurações de Inimigos Regulares (se 'RegularEnemies')")]
+    public GameObject enemyToSpawn;
+    public float waveLength = 10f; 
+    public float timeBetweenSpawns = 1f; 
+
+    [Header("Configurações de Encontro com Chefe (se 'BossEncounter')")]
+    public GameObject bossPrefab; 
+    public Vector3 bossSpawnOffset = new Vector3(0, 5, 0);
+
+    [Header("Especificações de Inimigo para Esta Onda (aplica-se a 'enemyToSpawn' ou 'bossPrefab')")]
+    public EnemyMovementType movementType = EnemyMovementType.Normal;
+    public float dashSpeedMultiplier = 2f; 
+    public float dashDuration = 1f;
+    public float dashCooldown = 3f; 
+
+    [HideInInspector]
+    public float spawnTimer;
+}
+
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyToSpawn; // Inimigo geral, pode ser removido se só usar waves
-    public float timeTopSpawn; // Não usado no sistema de ondas atual, pode ser removido
-    private float spawnCounter;
+    // Removido: public GameObject enemyToSpawn; // Não é mais necessário aqui.
+    // Removido: public float timeTopSpawn; // Não é mais necessário.
+    // Removido: private float spawnCounter; // Pode ser removido, não é mais usado diretamente.
 
     public Transform minSpawn, maxSpawn;
 
-    private Transform target;
+    private Transform target; 
 
-    private float despawnDistance;
+    private float despawnDistance; 
 
-    private List<GameObject> spawnedEnemies = new List<GameObject>(); // Inimigos atualmente na cena
+    private List<GameObject> spawnedEnemies = new List<GameObject>(); 
 
-    public int checkPerFrame; // Para despawn
-    private int enemyToCheck; // Para despawn
+    public int checkPerFrame;
+    private int enemyToCheck; 
 
     public List<WaveInfo> waves;
 
-    private int currentWave;
-    private float waveCounter;
+    private int currentWave; 
+    private float waveCounter; 
 
-    private bool allWavesInitiated = false; // Flag para indicar se todas as ondas foram iniciadas
+    private bool allWavesInitiated = false; 
+    private bool allWavesCompleted = false; 
+
+
+    private GameObject currentBossGameObject;
 
     public Vector3 SelectSpawnPoint()
     {
         Vector3 spawnPoint = Vector3.zero;
 
-        // Lógica de seleção de ponto de spawn
+       
         if (Random.Range(0f, 1f) > .5f)
         {
             spawnPoint.y = Random.Range(minSpawn.position.y, maxSpawn.position.y);
@@ -62,7 +105,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        // Encontra o player para seguir
+        // Encontra o player para seguir e definir como target
         PlayerController player = FindAnyObjectByType<PlayerController>();
         if (player != null)
         {
@@ -73,67 +116,114 @@ public class EnemySpawner : MonoBehaviour
             Debug.LogError("PlayerController não encontrado! O Spawner não poderá seguir o player.");
         }
 
-        // Calcula a distância de despawn
+        // Calcula a distância de despawn com base nos limites da câmera/mapa
         despawnDistance = Vector3.Distance(transform.position, maxSpawn.position) + 4f;
 
-        currentWave = -1; // Começa antes da primeira onda
-        allWavesInitiated = false; // Reseta a flag
+        currentWave = -1; 
+        allWavesInitiated = false;
+        allWavesCompleted = false;
+        currentBossGameObject = null; 
 
-        // Inicializa os timers de todas as waves
+        // Inicializa os timers de spawn para todas as waves de inimigos regulares
         for (int i = 0; i < waves.Count; i++)
         {
-            waves[i].spawnTimer = waves[i].timeBetweenSpawns;
+            if (waves[i].contentType == WaveContentType.RegularEnemies)
+            {
+                waves[i].spawnTimer = waves[i].timeBetweenSpawns;
+            }
         }
 
-        GoToNextWave(); // Inicia a primeira onda
+        GoToNextWave();
     }
 
     void Update()
     {
-        // Certifica-se de que o player está ativo antes de continuar
-        if (PlayerHealthController.instance != null && PlayerHealthController.instance.gameObject.activeSelf)
+      
+        if (PlayerHealthController.instance != null && PlayerHealthController.instance.gameObject.activeSelf && !allWavesCompleted)
         {
-            // Lógica de spawn das ondas
-            if (!allWavesInitiated) // Se ainda há ondas a serem iniciadas
-            {
-                waveCounter -= Time.deltaTime;
 
-                if (waveCounter <= 0) // Duração da onda atual de spawn terminou
+            if (!allWavesInitiated) 
+            {
+ 
+                if (currentWave >= 0 && currentWave < waves.Count && waves[currentWave].contentType == WaveContentType.RegularEnemies)
                 {
-                    GoToNextWave(); // Tenta ir para a próxima onda
+                    waveCounter -= Time.deltaTime; 
+                    if (waveCounter <= 0)
+                    {
+                        GoToNextWave();
+                    }
+                }
+               
+                else if (currentWave >= 0 && currentWave < waves.Count && waves[currentWave].contentType == WaveContentType.BossEncounter)
+                {
+                    if (currentBossGameObject == null) 
+                    {
+                        Debug.Log($"Boss da Onda {currentWave + 1} derrotado!");
+                        GoToNextWave(); // Avança para a próxima onda
+                    }
                 }
 
-
+                // Lógica de spawn para ondas de inimigos regulares ativas
                 if (currentWave >= 0 && currentWave < waves.Count)
                 {
-                    // Para cada wave de 0 até a atual
                     for (int i = 0; i <= currentWave; i++)
                     {
-                        // Cada wave tem seu próprio timer
-                        waves[i].spawnTimer -= Time.deltaTime;
 
-                        if (waves[i].spawnTimer <= 0)
+                        if (waves[i].contentType == WaveContentType.RegularEnemies)
                         {
-                            waves[i].spawnTimer = waves[i].timeBetweenSpawns;
+                            waves[i].spawnTimer -= Time.deltaTime;
 
-                            GameObject newEnemy = Instantiate(waves[i].enemyToSpawn, SelectSpawnPoint(), Quaternion.identity);
-                            spawnedEnemies.Add(newEnemy);
+                            if (waves[i].spawnTimer <= 0)
+                            {
+                                waves[i].spawnTimer = waves[i].timeBetweenSpawns; 
+
+                                GameObject newEnemyGO = Instantiate(waves[i].enemyToSpawn, SelectSpawnPoint(), Quaternion.identity);
+                                spawnedEnemies.Add(newEnemyGO);
+
+
+                                EnemyController newEnemyController = newEnemyGO.GetComponent<EnemyController>();
+                                if (newEnemyController != null)
+                                {
+                                    newEnemyController.currentMovementType = waves[i].movementType;
+                                    newEnemyController.dashSpeedMultiplier = waves[i].dashSpeedMultiplier;
+                                    newEnemyController.dashDuration = waves[i].dashDuration;
+                                    newEnemyController.dashCooldown = waves[i].dashCooldown;
+                                    newEnemyController.isBoss = false; // Garante que não é um chefe
+                                }
+                                else
+                                {
+                                    Debug.LogWarning($"O inimigo '{newEnemyGO.name}' da onda {i + 1} não possui um EnemyController.");
+                                }
+                            }
                         }
+                      
                     }
                 }
             }
-            else // Todas as ondas já iniciaram seus spawns
+            else 
             {
-                // Verifica a condição de fim de fase: não há mais inimigos spawnados em cena
-                if (spawnedEnemies.Count == 0)
+              
+                for (int i = spawnedEnemies.Count - 1; i >= 0; i--)
                 {
-                    Debug.Log("Todos os inimigos derrotados. Fase Completa!");
-                    // Chama o LevelManager para avisar que a fase terminou
+                    if (spawnedEnemies[i] == null)
+                    {
+                        spawnedEnemies.RemoveAt(i);
+                    }
+                }
+
+               
+                bool noRegularEnemiesLeft = (spawnedEnemies.Count == 0);
+                bool bossDefeatedOrNone = (currentBossGameObject == null);
+
+                if (noRegularEnemiesLeft && bossDefeatedOrNone)
+                {
+                    Debug.Log("Todos os inimigos e bosses derrotados. Fase Completa!");
+                    allWavesCompleted = true; 
+
                     if (LevelManager.instance != null)
                     {
                         LevelManager.instance.LevelCompleted();
-                        // Desabilita este spawner para que não faça mais nada após a conclusão da fase
-                        enabled = false; // Desativa o script para parar o Update
+                        enabled = false; 
                     }
                     else
                     {
@@ -142,77 +232,109 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
         }
+        else if (allWavesCompleted) 
+        {
+            return;
+        }
 
-        // Move o spawner com o player
+      
         if (target != null)
         {
             transform.position = target.position;
         }
 
-        // Lógica de Despawn
-        int checkTarget = enemyToCheck + checkPerFrame;
-
-        while (enemyToCheck < checkTarget)
+      
+        if (spawnedEnemies != null && spawnedEnemies.Count > 0)
         {
-            if (enemyToCheck < spawnedEnemies.Count)
+            int originalCount = spawnedEnemies.Count;
+            int enemiesCheckedThisFrame = 0;
+
+            while (enemiesCheckedThisFrame < checkPerFrame && enemyToCheck < originalCount)
             {
                 if (spawnedEnemies[enemyToCheck] != null)
                 {
-                    // Verifica distância para despawn
                     if (Vector3.Distance(transform.position, spawnedEnemies[enemyToCheck].transform.position) > despawnDistance)
                     {
                         Destroy(spawnedEnemies[enemyToCheck]);
                         spawnedEnemies.RemoveAt(enemyToCheck);
-                        checkTarget--; // Ajusta o alvo de verificação porque o tamanho da lista diminuiu
+                        originalCount--;
                     }
                     else
                     {
                         enemyToCheck++;
                     }
                 }
-                else // Inimigo foi destruído por outra forma (ex: pelo jogador)
+                else
                 {
                     spawnedEnemies.RemoveAt(enemyToCheck);
-                    checkTarget--; // Ajusta o alvo de verificação
+                    originalCount--;
                 }
+                enemiesCheckedThisFrame++;
             }
-            else // Chegou ao final da lista
+
+            if (enemyToCheck >= originalCount)
             {
-                enemyToCheck = 0; // Reseta para o próximo frame
-                checkTarget = 0; // Sai do loop
+                enemyToCheck = 0;
             }
+        }
+        else
+        {
+            enemyToCheck = 0;
         }
     }
 
     public void GoToNextWave()
     {
         currentWave++;
+        currentBossGameObject = null;
 
         if (currentWave < waves.Count)
         {
-            waveCounter = waves[currentWave].waveLength;
+            WaveInfo nextWave = waves[currentWave];
 
-           
-            waves[currentWave].spawnTimer = waves[currentWave].timeBetweenSpawns;
+            if (nextWave.contentType == WaveContentType.RegularEnemies)
+            {
+                waveCounter = nextWave.waveLength;
+                nextWave.spawnTimer = nextWave.timeBetweenSpawns;
+                Debug.Log($"Iniciando Onda {currentWave + 1} de {waves.Count} (Inimigos Regulares). Tipo de Movimento: {nextWave.movementType}");
+            }
+            else if (nextWave.contentType == WaveContentType.BossEncounter)
+            {
+                if (nextWave.bossPrefab != null)
+                {
+                    // Spawna o chefe em uma posição relativa ao jogador/spawner
+                    Vector3 bossSpawnPos = target.position + nextWave.bossSpawnOffset;
+                    GameObject newBossGO = Instantiate(nextWave.bossPrefab, bossSpawnPos, Quaternion.identity);
+                    currentBossGameObject = newBossGO; // Guarda a referência do chefe
 
-            Debug.Log($"Iniciando Onda {currentWave + 1} de {waves.Count}");
+
+                    EnemyController bossController = newBossGO.GetComponent<EnemyController>();
+                    if (bossController != null)
+                    {
+                        bossController.currentMovementType = nextWave.movementType;
+                        bossController.dashSpeedMultiplier = nextWave.dashSpeedMultiplier;
+                        bossController.dashDuration = nextWave.dashDuration;
+                        bossController.dashCooldown = nextWave.dashCooldown;
+                        bossController.isBoss = true; // Marca este inimigo como um chefe
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"O Boss '{newBossGO.name}' da onda {currentWave + 1} não possui um EnemyController.");
+                    }
+                    Debug.Log($"Iniciando Onda {currentWave + 1} de {waves.Count} (Encontro com Chefe). Chefe: {newBossGO.name}");
+                }
+                else
+                {
+                    Debug.LogError($"Wave {currentWave + 1} é do tipo Boss Encounter, mas não tem um Boss Prefab atribuído! Avançando para a próxima onda.");
+                    // Avança para a próxima onda para evitar travamento se não houver chefe configurado
+                    GoToNextWave();
+                }
+            }
         }
         else
         {
-            // Todas as ondas foram processadas para spawn
-            allWavesInitiated = true;
-            Debug.Log("Todas as ondas foram iniciadas. Aguardando que os inimigos sejam derrotados.");
+            allWavesInitiated = true; // Todas as ondas foram iniciadas
+            Debug.Log("Todas as ondas foram iniciadas. Aguardando que os inimigos em cena (e o boss, se houver) sejam derrotados.");
         }
     }
-}
-
-[System.Serializable]
-public class WaveInfo
-{
-    public GameObject enemyToSpawn;
-    public float waveLength = 10f; // Duração total para spawnar inimigos nesta onda
-    public float timeBetweenSpawns = 1f;
-
-    [HideInInspector]
-    public float spawnTimer; // Timer individual para cada wave
 }

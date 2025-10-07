@@ -23,13 +23,28 @@ public class EnemyController : MonoBehaviour
     [Header("Damage Detection System")]
     public bool useDamageDetection = true;
 
-    // ADICIONE ESTA LINHA - Referência ao Animator
+
     [Header("Animation")]
     public Animator animator;
 
-    // Flag do sistema de detecção
+  
     private bool hasTakenDamage = false;
     private bool isDead = false;
+
+
+    [HideInInspector] public EnemyMovementType currentMovementType = EnemyMovementType.Normal;
+    [HideInInspector] public float dashSpeedMultiplier = 2f; 
+    [HideInInspector] public float dashDuration = 1f; 
+    [HideInInspector] public float dashCooldown = 3f;
+
+    private float dashTimer;
+    private float dashCooldownTimer;
+    private bool isDashing = false;
+    private bool canDash = true; 
+
+ 
+    [HideInInspector] public bool isBoss = false;
+
 
     void Start()
     {
@@ -39,22 +54,62 @@ public class EnemyController : MonoBehaviour
         {
             animator = GetComponent<Animator>();
         }
+
+
+        if (currentMovementType == EnemyMovementType.Dashing)
+        {
+            dashCooldownTimer = Random.Range(0f, dashCooldown); 
+        }
     }
 
     void FixedUpdate()
     {
-        if (target == null || isDead)
+
+        if (target == null || isDead || !PlayerController.Instance.gameObject.activeSelf)
         {
             theRB.linearVelocity = Vector2.zero;
             return;
+        }
+
+
+        if (knockBackCounter > 0)
+        {
+            return;
+        }
+
+        Vector2 direction = (target.position - transform.position).normalized;
+        float currentSpeed = moveSpeed;
+
+        if (currentMovementType == EnemyMovementType.Dashing)
+        {
+            // Lógica de dash
+            if (isDashing)
+            {
+                currentSpeed *= dashSpeedMultiplier; 
+                dashTimer -= Time.fixedDeltaTime;
+                if (dashTimer <= 0)
+                {
+                    isDashing = false; 
+                    dashCooldownTimer = dashCooldown; 
+                }
+            }
+            else
+            {
+                dashCooldownTimer -= Time.fixedDeltaTime;
+                if (dashCooldownTimer <= 0 && canDash) 
+                {
+                    isDashing = true; 
+                    dashTimer = dashDuration; 
+
+                }
+            }
         }
 
         float distanceToTarget = Vector2.Distance(transform.position, target.position);
 
         if (distanceToTarget > stopDistance)
         {
-            Vector2 direction = (target.position - transform.position).normalized;
-            theRB.linearVelocity = direction * moveSpeed;
+            theRB.linearVelocity = direction * currentSpeed;
         }
         else
         {
@@ -64,29 +119,53 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (knockBackCounter > 0)
+        if (PlayerController.Instance.gameObject.activeSelf == true)
         {
-            knockBackCounter -= Time.deltaTime;
-
-            if (moveSpeed > 0)
+            if (knockBackCounter > 0)
             {
-                moveSpeed = -moveSpeed * 2f;
+
+                if (isBoss)
+                {
+                    knockBackCounter = 0; // Se for um chefe, cancela o knockback. Chefes são imunes.
+
+                }
+                else
+                {
+                    knockBackCounter -= Time.deltaTime;
+
+                    // Lógica de movimento reverso durante o knockback 
+                    if (moveSpeed > 0)
+                    {
+                        moveSpeed = -Mathf.Abs(moveSpeed) * 2f; 
+                    }
+
+                    if (knockBackCounter <= 0)
+                    {
+                        moveSpeed = Mathf.Abs(moveSpeed * .5f); 
+                    }
+                }
             }
 
-            if (knockBackCounter <= 0)
+            if (hitCounter > 0f)
             {
-                moveSpeed = Mathf.Abs(moveSpeed * .5f);
+                hitCounter -= Time.deltaTime; 
             }
         }
-
-        if (hitCounter > 0f)
+        else
         {
-            hitCounter -= Time.deltaTime;
+            theRB.linearVelocity = Vector2.zero; 
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            return;
+        }
+
+
         if (collision.gameObject.tag == "Player" && hitCounter <= 0f)
         {
             PlayerHealthController.instance.TakeDamage(damage);
@@ -98,44 +177,43 @@ public class EnemyController : MonoBehaviour
     {
         health -= damageToTake;
 
-        // SISTEMA DE DETECÇÃO DE DANO
+
         if (useDamageDetection && !hasTakenDamage)
         {
             hasTakenDamage = true;
-
             if (animator != null)
             {
-                animator.SetBool("hasTakenDamage", true);
+                animator.SetBool("hasTakenDamage", true); 
             }
-
-            //Debug.Log($"{gameObject.name} tomou dano pela primeira vez!");
         }
 
         if (health <= 0)
         {
-            isDead = true;
+            isDead = true; 
+
 
 
             Destroy(gameObject);
 
+
             ExperienceLevelController.instance.SpawnExp(transform.position, expToGive);
         }
+
 
         DamageNumberController.instance.SpawnDamage(damageToTake, transform.position);
     }
 
-
     public void TakeDamage(float damageToTake, bool shouldKnockBack)
     {
-        TakeDamage(damageToTake);
+        TakeDamage(damageToTake); 
 
         if (shouldKnockBack == true)
         {
-            knockBackCounter = knockBackTime;
+            knockBackCounter = knockBackTime; 
         }
     }
 
-    // Métodos públicos para outros scripts consultarem o estado
+
     public bool HasTakenDamage()
     {
         return hasTakenDamage;
@@ -146,7 +224,7 @@ public class EnemyController : MonoBehaviour
         return isDead;
     }
 
-    // Método para resetar o estado (útil para testing ou respawn)
+
     public void ResetDamageState()
     {
         if (useDamageDetection)
