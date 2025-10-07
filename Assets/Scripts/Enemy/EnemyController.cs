@@ -7,6 +7,8 @@ public class EnemyController : MonoBehaviour
     public float moveSpeed;
     public float stopDistance = 0.5f;
     public int expToGive = 1;
+    public int coinValue = 1;
+    public float coinDropRate = .5f;
     private Transform target;
 
     [Header("Combat Settings")]
@@ -191,12 +193,14 @@ public class EnemyController : MonoBehaviour
         {
             isDead = true; 
 
-
-
             Destroy(gameObject);
 
-
             ExperienceLevelController.instance.SpawnExp(transform.position, expToGive);
+
+            if(Random.value <= coinDropRate)
+            {
+                CoinController.instance.DropCooin(transform.position, coinValue);
+            }
         }
 
 
