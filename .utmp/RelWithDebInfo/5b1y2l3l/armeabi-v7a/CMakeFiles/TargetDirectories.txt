@@ -1,0 +1,8 @@
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/GameActivity/CMakeFiles/game.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/GameActivity/CMakeFiles/rebuild_cache.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
+C:/Users/Profissional/Documents/URI-Survivor/.utmp/RelWithDebInfo/5b1y2l3l/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir

@@ -457,12 +457,20 @@ MonoBehaviour:
   theRB: {fileID: 6204212709847930255}
   moveSpeed: 1.5
   stopDistance: 0.5
+  expToGive: 1
+  coinValue: 1
+  coinDropRate: 0.5
   damage: 15
   hitWaitTime: 1
-  health: 25
+  health: 100
   knockBackTime: 0.5
   useDamageDetection: 1
   animator: {fileID: 4885974724303321814}
+  currentMovementType: 0
+  dashSpeedMultiplier: 2
+  dashDuration: 1
+  dashCooldown: 3
+  isBoss: 0
 --- !u!114 &940797740981636970
 MonoBehaviour:
   m_ObjectHideFlags: 0
