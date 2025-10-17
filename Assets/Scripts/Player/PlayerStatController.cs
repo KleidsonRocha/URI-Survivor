@@ -14,7 +14,7 @@ public class PlayerStatController : MonoBehaviour
     public List<PlayerStatValue> movespeed, heath, pickupRange, maxWeapons;
     public int moveSpeedLevelCount, healthLevelCount, pickupRangeLevelCount;
 
-    public int moveSpeedLevel, heathLevel, pickupEangeLevel, maxWeaponLevel;
+    public int moveSpeedLevel, heathLevel, pickupRangeLevel, maxWeaponLevel;
 
     void Start()
     {
@@ -35,7 +35,56 @@ public class PlayerStatController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(UIController.instance.levelUpPanel.activeSelf == true)
+        {
+            UpdateDisplay();
+        }
+    }
 
+    public void UpdateDisplay()
+    {
+
+        UIController.instance.moveSpeedUpgradeDisplay.updateDisplay(movespeed[moveSpeedLevel +1].cost);
+        UIController.instance.healthUpgradeDisplay.updateDisplay(heath[heathLevel + 1].cost);
+        UIController.instance.pickupRangeUpgradeDisplay.updateDisplay(pickupRange[pickupRangeLevel + 1].cost);
+        UIController.instance.maxWeaponsUpgradeDisplay.updateDisplay(maxWeapons[maxWeaponLevel +1].cost);
+
+    }
+
+    public void PurchaseMoveSpeed()
+    {
+        moveSpeedLevel++;
+        CoinController.instance.SpendCoins(movespeed[moveSpeedLevel].cost);
+        UpdateDisplay();
+
+        PlayerController.Instance.moveSpeed = movespeed[moveSpeedLevel].value;
+    }
+    public void PurchaseHealth()
+    {
+        heathLevel++;
+        CoinController.instance.SpendCoins(heath[heathLevel].cost);
+        UpdateDisplay();
+
+        PlayerHealthController.instance.maxHealth = heath[heathLevel].value;
+        PlayerHealthController.instance.currentHealth = heath[heathLevel].value - heath[heathLevel -1].value;
+
+    }
+
+    public void PurchaseRange()
+    {
+        pickupRangeLevel++;
+        CoinController.instance.SpendCoins(pickupRange[pickupRangeLevel].cost);
+        UpdateDisplay();
+
+        PlayerController.Instance.pickupRange = pickupRange[pickupRangeLevel].value;
+    }
+    public void PurchaseMaxWeapons()
+    {
+        maxWeaponLevel++;
+        CoinController.instance.SpendCoins(maxWeapons[maxWeaponLevel].cost);
+        UpdateDisplay();
+
+        PlayerController.Instance.maxWeapons = Mathf.RoundToInt(maxWeapons[maxWeaponLevel].value);
     }
 }
 

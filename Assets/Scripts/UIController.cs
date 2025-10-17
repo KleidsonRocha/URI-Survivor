@@ -20,6 +20,7 @@ public class UIController : MonoBehaviour
 
     public TMP_Text coinText;
 
+    public PlayerStatsUpgradeDisplay moveSpeedUpgradeDisplay, healthUpgradeDisplay, pickupRangeUpgradeDisplay, maxWeaponsUpgradeDisplay;
     private void Awake()
     {
        
@@ -50,13 +51,9 @@ public class UIController : MonoBehaviour
         {
             float fillPercentage = levelExp > 0 ? (float)currentExp / levelExp : 0f;
 
-            // Cores baseadas nas cores de heatmap de commit do GitHub
-            // Verde claro (equivalente a poucos commits)
-            // Hex: #9BE9A8 -> RGB (155, 233, 168)
+
             Color startColor = new Color(155f / 255f, 233f / 255f, 168f / 255f);
 
-            // Verde escuro (equivalente a muitos commits)
-            // Hex: #216E39 -> RGB (33, 110, 57)
             Color endColor = new Color(33f / 255f, 110f / 255f, 57f / 255f);
 
             expFillImage.color = Color.Lerp(startColor, endColor, fillPercentage);
@@ -72,6 +69,25 @@ public class UIController : MonoBehaviour
     {
         levelUpPanel.SetActive(false);
         Time.timeScale = 1f;
+    }
+
+    public void PurchaseMoveSpeed()
+    {
+        PlayerStatController.instance.PurchaseMoveSpeed();
+
+    }
+    public void PurchaseHealth()
+    {
+        PlayerStatController.instance.PurchaseHealth();
+    }
+
+    public void PurchaseRange()
+    {
+        PlayerStatController.instance.PurchaseRange();
+    }
+    public void PurchaseMaxWeapons()
+    {
+        PlayerStatController.instance.PurchaseMaxWeapons();
     }
 
     public void updateCoins()
