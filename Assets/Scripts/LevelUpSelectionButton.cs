@@ -19,7 +19,7 @@ public class LevelUpSelectionButton: MonoBehaviour
             nameLevelText.text = theWeapon.name + " - Lvl " + theWeapon.weaponLevel;
         } else
         {
-            upgradeDescText.text = "Unlock " + theWeapon.name;
+            upgradeDescText.text = "Desbloquear: " + theWeapon.name;
             weaponIcon.sprite = theWeapon.icon;
 
             nameLevelText.text = theWeapon.name;
