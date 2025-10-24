@@ -2,51 +2,51 @@ using UnityEngine;
 
 public class CoinPickup : MonoBehaviour
 {
-    public int coinAmount = 1;
+    public int coinAmount;
 
-    private bool movingToPlayer;
-    public float moveSpeed;
-
-    public float timeBetweenChecks = .2f;
-    private float checkCounter;
-
-    private PlayerController player;
+    private bool movingToPlayer = false; 
+    public float moveSpeed = 7f; 
+    public float magnetizeSpeedMultiplier = 2f;
 
 
+
+    private Transform playerTransform;
 
     void Start()
     {
-        player = PlayerController.Instance;
+       
+        if (PlayerController.Instance != null)
+        {
+            playerTransform = PlayerController.Instance.transform;
+            
+        }
     }
 
     void Update()
     {
-        if (movingToPlayer == true)
+        if (movingToPlayer == true && playerTransform != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+          
+            transform.position = Vector3.MoveTowards(transform.position, playerTransform.position, (moveSpeed * magnetizeSpeedMultiplier) * Time.deltaTime);
         }
-        else
-        {
-            checkCounter -= Time.deltaTime;
-            if (checkCounter <= 0)
-            {
-                checkCounter = timeBetweenChecks;
+        
+    }
 
-                if (Vector3.Distance(transform.position, player.transform.position) < player.pickupRange)
-                {
-                    movingToPlayer = true;
-                    moveSpeed += player.moveSpeed;
-                }
-            }
-        }
+    
+    public void StartMagnetizing()
+    {
+        movingToPlayer = true;
+      
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
-            CoinController.instance.AddCoins(coinAmount);
-
+            if (CoinController.instance != null)
+            {
+                CoinController.instance.AddCoins(coinAmount);
+            }
             Destroy(gameObject);
         }
     }

@@ -148,12 +148,21 @@ MonoBehaviour:
   moveSpeed: 1
   stopDistance: 0.5
   expToGive: 1
+  pickupAllCoinPrefab: {fileID: 2974518068517352112, guid: d8f777263943a7244a67e61f9f88ae56, type: 3}
+  pickupAllCoinDropRate: 0.1
+  coinValue: 1
+  coinDropRate: 0.5
   damage: 5
   hitWaitTime: 1
   health: 5
   knockBackTime: 0.5
   useDamageDetection: 0
   animator: {fileID: 0}
+  currentMovementType: 0
+  dashSpeedMultiplier: 2
+  dashDuration: 1
+  dashCooldown: 3
+  isBoss: 0
 --- !u!114 &6679090484152525089
 MonoBehaviour:
   m_ObjectHideFlags: 0

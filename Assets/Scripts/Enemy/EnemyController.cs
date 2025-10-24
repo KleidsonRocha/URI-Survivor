@@ -7,6 +7,12 @@ public class EnemyController : MonoBehaviour
     public float moveSpeed;
     public float stopDistance = 0.5f;
     public int expToGive = 1;
+
+
+    [Header("Item Drops")]
+    public GameObject pickupAllCoinPrefab; 
+    public float pickupAllCoinDropRate = 0.1f; 
+
     public int coinValue = 1;
     public float coinDropRate = .5f;
     private Transform target;
@@ -200,6 +206,13 @@ public class EnemyController : MonoBehaviour
             if(Random.value <= coinDropRate)
             {
                 CoinController.instance.DropCooin(transform.position, coinValue);
+            }
+
+            if (Random.value <= pickupAllCoinDropRate)
+            {
+    
+                Instantiate(pickupAllCoinPrefab, transform.position + new Vector3(.2f, .1f, 0f), Quaternion.identity);
+                Debug.Log("Inimigo dropou um 'Pickup All Coin'!");
             }
         }
 
