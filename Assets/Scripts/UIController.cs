@@ -36,6 +36,8 @@ public class UIController : MonoBehaviour
         
     }
 
+
+
     public void UpdateExperience(int currentExp, int levelExp, int currentlvl)
     {
         explvlSlider.maxValue = levelExp;
@@ -134,4 +136,6 @@ public class UIController : MonoBehaviour
         expFillImage.color = targetDynamicColor;
        
     }
+
+
 }
