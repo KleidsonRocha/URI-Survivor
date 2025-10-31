@@ -28,10 +28,10 @@ public class PlayerHealthController : MonoBehaviour
 
 
         //testar o dano
-        //if (Input.GetKeyDown(KeyCode.T))
-        //{
-        //   TakeDamage(10f);
-        //}
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+           TakeDamage(10f);
+        }
     }
 
     public void TakeDamage(float damageToTake)
@@ -42,6 +42,7 @@ public class PlayerHealthController : MonoBehaviour
         {
             //destiva o player
             gameObject.SetActive(false);
+            UIController.instance.levelEndScreen.SetActive(true);
         }
 
         HealthSlider.value = currentHealth;

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Importar para carregar cenas
 
@@ -13,6 +14,9 @@ public class LevelManager : MonoBehaviour
 
     [Tooltip("Nome da cena do menu principal ou seleção de fases.")]
     public string mainMenuSceneName = "MainMenu"; // Nome da sua cena de menu/seleção de fases
+
+    public bool gameActive;
+
 
     void Awake()
     {
@@ -30,6 +34,7 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        gameActive = false;
         // Inicializa o PlayerPrefs se for a primeira vez que o jogo está rodando
         // A fase 0 (primeira fase) é sempre desbloqueada
         if (!PlayerPrefs.HasKey("CurrentUnlockedLevel"))
@@ -94,7 +99,7 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
-    // Métodos auxiliares para a tela de seleção de fases
+
     public int GetCurrentUnlockedLevelIndex()
     {
         return PlayerPrefs.GetInt("CurrentUnlockedLevel", 0);
@@ -105,7 +110,14 @@ public class LevelManager : MonoBehaviour
         return PlayerPrefs.GetInt("Level_" + levelIndex + "_Completed", 0) == 1;
     }
 
-    // Método para resetar todo o progresso (útil para testes)
+    public void EndLevel()
+    {
+        gameActive = false;
+
+        UIController.instance.levelEndScreen.SetActive(true);
+    }
+
+
     public void ResetGameProgress()
     {
         PlayerPrefs.DeleteAll(); // Apaga todas as chaves salvas

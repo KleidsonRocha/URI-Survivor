@@ -113,4 +113,11 @@ public class LevelSelectManager : MonoBehaviour
             Debug.Log("Progresso do jogo resetado.");
         }
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+
+        Debug.Log("Saindo!");
+    }
 }

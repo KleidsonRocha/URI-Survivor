@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -21,6 +22,12 @@ public class UIController : MonoBehaviour
     public TMP_Text coinText;
 
     public PlayerStatsUpgradeDisplay moveSpeedUpgradeDisplay, healthUpgradeDisplay, pickupRangeUpgradeDisplay, maxWeaponsUpgradeDisplay;
+
+    public string mainMenuName;
+
+    public GameObject pauseScreen;
+
+    public GameObject levelEndScreen;
     private void Awake()
     {
        
@@ -36,8 +43,13 @@ public class UIController : MonoBehaviour
         
     }
 
-
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseUnpause();
+        }
+    }
     public void UpdateExperience(int currentExp, int levelExp, int currentlvl)
     {
         explvlSlider.maxValue = levelExp;
@@ -78,6 +90,7 @@ public class UIController : MonoBehaviour
         PlayerStatController.instance.PurchaseMoveSpeed();
 
     }
+ 
     public void PurchaseHealth()
     {
         PlayerStatController.instance.PurchaseHealth();
@@ -87,6 +100,7 @@ public class UIController : MonoBehaviour
     {
         PlayerStatController.instance.PurchaseRange();
     }
+ 
     public void PurchaseMaxWeapons()
     {
         PlayerStatController.instance.PurchaseMaxWeapons();
@@ -137,5 +151,37 @@ public class UIController : MonoBehaviour
        
     }
 
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(mainMenuName);
+    }
 
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+
+        Debug.Log("Saindo!");
+    }
+
+
+    public void PauseUnpause()
+    {
+        if (pauseScreen.activeSelf == false)
+        {
+            pauseScreen.SetActive(true);
+            Time.timeScale = 0;
+
+        } else
+        {
+            pauseScreen.SetActive(false);
+            Time.timeScale = 1f;
+        } 
+       
+
+    }
 }
