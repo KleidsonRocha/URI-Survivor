@@ -79,6 +79,8 @@ public class WhipWeapon : Weapon
             EnemyDamager newDamager = Instantiate(damagerTemplate.gameObject, attackOriginPoint.position, rotation).GetComponent<EnemyDamager>(); // <-- ALTERADO AQUI
             newDamager.gameObject.SetActive(true);
 
+            SFXManager.instance.PlaySFXPitched(7);
+
             newDamager.damageAmount = stats[weaponLevel].damage;
             newDamager.lifeTime = stats[weaponLevel].duration;
 

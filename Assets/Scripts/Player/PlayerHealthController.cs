@@ -43,6 +43,7 @@ public class PlayerHealthController : MonoBehaviour
             //destiva o player
             gameObject.SetActive(false);
             UIController.instance.levelEndScreen.SetActive(true);
+            SFXManager.instance.PlaySFX(3);
         }
 
         HealthSlider.value = currentHealth;

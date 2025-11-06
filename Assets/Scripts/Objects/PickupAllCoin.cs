@@ -20,7 +20,8 @@ public class PickupAllCoin : MonoBehaviour
         {
             ActivateMagnetismOnAllItems(); 
             hasBeenCollected = true;
-         
+            SFXManager.instance.PlaySFXPitched(2);
+
             Destroy(gameObject);
         }
     }

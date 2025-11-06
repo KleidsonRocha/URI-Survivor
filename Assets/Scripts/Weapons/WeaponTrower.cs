@@ -31,6 +31,8 @@ public class WeaponTrower : Weapon
             {
                 Instantiate(damager, damager.transform.position, damager.transform.rotation).gameObject.SetActive(true);
             }
+
+            SFXManager.instance.PlaySFXPitched(4);
         }
     }
 

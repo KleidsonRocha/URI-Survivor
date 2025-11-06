@@ -214,10 +214,15 @@ public class EnemyController : MonoBehaviour
                 Instantiate(pickupAllCoinPrefab, transform.position + new Vector3(.2f, .1f, 0f), Quaternion.identity);
                 Debug.Log("Inimigo dropou um 'Pickup All Coin'!");
             }
+
+            SFXManager.instance.PlaySFXPitched(0);
+        } else
+        {
+            SFXManager.instance.PlaySFXPitched(1);
         }
 
 
-        DamageNumberController.instance.SpawnDamage(damageToTake, transform.position);
+            DamageNumberController.instance.SpawnDamage(damageToTake, transform.position);
     }
 
     public void TakeDamage(float damageToTake, bool shouldKnockBack)

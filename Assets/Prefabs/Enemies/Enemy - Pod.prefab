@@ -454,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8691a5e711a0d844b9ae25aa05b9f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5376335842204386835, guid: 44da026c0b8c1cb4b8986e465d02ab91, type: 3}
+  projectilePrefab: {fileID: 2503342327211894910, guid: dcdd786772ce6104396fb38aa2a58443, type: 3}
   firePoint: {fileID: 6338457808768740227}
   attackRange: 5
   attackCooldown: 2
