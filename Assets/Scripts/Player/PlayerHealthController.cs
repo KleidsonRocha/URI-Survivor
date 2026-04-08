@@ -15,11 +15,8 @@ public class PlayerHealthController : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;    
-
-
-        HealthSlider.maxValue = maxHealth;
-        HealthSlider.value = currentHealth;
+        currentHealth = maxHealth;
+        RefreshHealthUI();
     }
 
 
@@ -36,7 +33,8 @@ public class PlayerHealthController : MonoBehaviour
 
     public void TakeDamage(float damageToTake)
     {
-        currentHealth -= damageToTake;
+        currentHealth = Mathf.Max(currentHealth - damageToTake, 0f);
+        RefreshHealthUI();
 
         if (currentHealth <= 0)
         {
@@ -45,7 +43,27 @@ public class PlayerHealthController : MonoBehaviour
             UIController.instance.levelEndScreen.SetActive(true);
             SFXManager.instance.PlaySFX(3);
         }
+    }
 
+    public void Heal(float amountToHeal)
+    {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        currentHealth = Mathf.Min(currentHealth + amountToHeal, maxHealth);
+        RefreshHealthUI();
+    }
+
+    public void RefreshHealthUI()
+    {
+        if (HealthSlider == null)
+        {
+            return;
+        }
+
+        HealthSlider.maxValue = maxHealth;
         HealthSlider.value = currentHealth;
     }
 }

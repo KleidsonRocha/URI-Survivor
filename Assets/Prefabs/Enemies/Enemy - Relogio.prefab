@@ -150,6 +150,8 @@ MonoBehaviour:
   expToGive: 1
   pickupAllCoinPrefab: {fileID: 2974518068517352112, guid: d8f777263943a7244a67e61f9f88ae56, type: 3}
   pickupAllCoinDropRate: 0.1
+  healthPickupPrefab: {fileID: 2974518068517352112, guid: 996d7ef8b34288c4990eba427fa37153, type: 3}
+  healthPickupDropRate: 0.1
   coinValue: 3
   coinDropRate: 0.5
   damage: 5
@@ -193,11 +195,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5376335842204386835, guid: 44da026c0b8c1cb4b8986e465d02ab91, type: 3}
   firePoint: {fileID: 7530888676719354763}
-  attackRange: 6
-  attackCooldown: 2
-  projectileSpeed: 2
-  projectileDamage: 1
-  keepDistanceRange: 4
+  attackRange: 10
+  attackCooldown: 1
+  projectileSpeed: 3
+  projectileDamage: 2
+  keepDistanceRange: 6
   shouldMaintainDistance: 1
   enableDebugLogs: 0
 --- !u!1 &7666800265219893712

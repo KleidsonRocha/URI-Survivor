@@ -65,8 +65,10 @@ public class PlayerStatController : MonoBehaviour
         CoinController.instance.SpendCoins(heath[heathLevel].cost);
         UpdateDisplay();
 
+        float healthIncrease = heath[heathLevel].value - heath[heathLevel - 1].value;
         PlayerHealthController.instance.maxHealth = heath[heathLevel].value;
-        PlayerHealthController.instance.currentHealth = heath[heathLevel].value - heath[heathLevel -1].value;
+        PlayerHealthController.instance.currentHealth = Mathf.Min(PlayerHealthController.instance.currentHealth + healthIncrease, PlayerHealthController.instance.maxHealth);
+        PlayerHealthController.instance.RefreshHealthUI();
 
     }
 
